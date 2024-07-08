@@ -21,7 +21,9 @@ const StatHeader: React.FC = () => {
     if (!isPublished) {
       return null
     }
-    const url = `http://localhost:3000/question/${id}`
+    const protocol = window.location.protocol
+    const hostname = window.location.hostname
+    const url = `${protocol}//${hostname}:3000/question/${id}`
     const QR_code_element = (
       <div text-align="center">
         <QRCode renderAs="svg" value={url} size={150}></QRCode>
@@ -39,7 +41,7 @@ const StatHeader: React.FC = () => {
       </Space>
     )
   }, [id, isPublished])
-  
+
   return (
     <div bg="#fff" border="b-solid 1 b-[#e8e8e8]" py="12">
       <div flex="~" mx="24">
