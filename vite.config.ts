@@ -8,18 +8,18 @@ export default defineConfig({
     react(),
     UnoCSS(),
     visualizer({
-      open: true,
+      open: false,
       filename: 'stats.html',
       gzipSize: true,
       brotliSize: true,
       emitFile: false,
     }),
-    chunkSplitPlugin({
-      strategy: 'default',
-      customSplitting: {
-        'react-vendor': [/react/, /react-dom/],
-        'ant-vendor': [/antd/],
-      },
-    }),
+    // chunkSplitPlugin({
+    //   strategy: 'default',
+    //   customSplitting: {
+    //     'react-vendor': [/react/, /react-dom/],
+    //     'ant-vendor': [/antd/],
+    //   },
+    // }),
   ],
 })
