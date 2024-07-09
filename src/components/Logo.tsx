@@ -24,7 +24,7 @@ const Logo: React.FC = () => {
           <Title style={{ fontSize: '32px', color: '#f7f7f7' }}>
             <FormOutlined />
           </Title>
-          <Title style={{ fontSize: '32px', color: '#f7f7f7' }}>浅浅问卷</Title>
+          <Title style={{ fontSize: '32px', color: '#f7f7f7' }}>测试浅浅问卷</Title>
         </Space>{' '}
       </Link>
     </div>
