@@ -107,7 +107,7 @@ const Trash: React.FC = () => {
         )}
       </div>
       {!loading && (
-        <div text-align="center">
+        <div flex="~" justify="center">
           <ListPage total={total} />
         </div>
       )}
