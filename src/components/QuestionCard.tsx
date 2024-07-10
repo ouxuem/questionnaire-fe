@@ -1,5 +1,5 @@
 import { CopyOutlined, DeleteOutlined, EditOutlined, ExclamationCircleOutlined, LineChartOutlined, StarOutlined } from '@ant-design/icons'
-import { Button, Divider, Space, Tag, Popconfirm, Modal, message, Tooltip } from 'antd'
+import { Button, Divider, Space, Tag, Popconfirm, Modal, message } from 'antd'
 import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { api_q_copyQuestion, api_q_updateQuestion } from '../api/question'
@@ -20,7 +20,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ id, title, isStar, isPublis
   const [isStarState, setIsStarState] = useState(isStar)
   const [isDeletedState, setIsDeletedState] = useState(false)
   const [isPublishedState, setIsPublishedState] = useState(isPublished)
-  const [answerCountState, setAnswerCountState] = useState(answerCount)
   // 通用的更新问卷函数
   const useUpdateQuestion = (updateField: string) => {
     return useRequest(
@@ -45,7 +44,6 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ id, title, isStar, isPublis
               refresh()
             } else {
               setIsPublishedState(value)
-              setAnswerCountState(0)
             }
             message.success(value ? '发布成功' : '取消发布成功')
           }
@@ -68,15 +66,14 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ id, title, isStar, isPublis
     })
   }
 
-  // 取消发布
-
-  const cancelPublish = () => {
+  const edit = () => {
     Modal.confirm({
-      title: '取消发布将失去所有答卷，确认取消发布？',
-      onOk: () => updatePublish(false),
+      title: '已发布或者已有答卷，编辑问卷可能会导致答卷丢失，建议复制问卷后编辑。',
+      onOk: () => navigate(`/detail/edit/${id}`),
       icon: <ExclamationCircleOutlined />,
-      okText: '确定',
-      cancelText: '取消',
+      okText: '确认编辑',
+      cancelText: '取消编辑',
+      width: 700,
     })
   }
 
@@ -109,13 +106,13 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ id, title, isStar, isPublis
         <div flex="1" text-align="right" font-size="12">
           <Space>
             {isPublishedState ? (
-              <Button loading={updatePublishLoading} onClick={cancelPublish} danger size="small">
+              <Button loading={updatePublishLoading} onClick={() => updatePublish(false)} danger size="small">
                 取消发布
               </Button>
             ) : (
               <Tag>未发布</Tag>
             )}
-            <span>答卷：{answerCountState}</span>
+            <span>答卷：{answerCount}</span>
             <span>{createdAt}</span>
           </Space>
         </div>
@@ -124,20 +121,21 @@ const QuestionCard: React.FC<QuestionCardProps> = ({ id, title, isStar, isPublis
       <div flex="~">
         <div flex="1">
           <Space>
-            {isPublishedState ? (
-              <>
-                <Tooltip title="已发布问卷暂不支持编辑">
-                  <Button disabled type="text" size="small" icon={<EditOutlined />}>
-                    编辑问卷
-                  </Button>
-                </Tooltip>
-              </>
-            ) : (
-              <Button onClick={() => navigate(`/detail/edit/${id}`)} type="text" size="small" icon={<EditOutlined />}>
-                编辑问卷
-              </Button>
-            )}
-            <Button disabled={!isPublishedState} onClick={() => navigate(`/detail/stat/${id}`)} type="text" size="small" icon={<LineChartOutlined />}>
+            <Button
+              onClick={() => {
+                if (answerCount > 0 || isPublishedState) {
+                  edit()
+                } else {
+                  navigate(`/detail/edit/${id}`)
+                }
+              }}
+              type="text"
+              size="small"
+              icon={<EditOutlined />}
+            >
+              编辑问卷
+            </Button>
+            <Button disabled={!isPublishedState && answerCount === 0} onClick={() => navigate(`/detail/stat/${id}`)} type="text" size="small" icon={<LineChartOutlined />}>
               数据统计
             </Button>
           </Space>

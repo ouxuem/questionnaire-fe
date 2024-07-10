@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import useLoadQuestionData from '../../../hooks/useLoadQuestionData'
-import { Button, Result } from 'antd'
 import { usePageInfoStore } from '../../../store/pageInfo'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from 'ahooks'
@@ -30,21 +29,6 @@ const Stat: React.FC = () => {
       return LoadingElement
     }
 
-    if (typeof isPublished === 'boolean' && !isPublished) {
-      return (
-        <div flex="1">
-          <Result
-            status="warning"
-            title="该问卷尚未发布"
-            extra={
-              <Button onClick={() => navigate(-1)} type="primary">
-                返回
-              </Button>
-            }
-          />
-        </div>
-      )
-    }
     return (
       <>
         <div w="350" mr="24">

@@ -61,7 +61,7 @@ const PageStat: React.FC<PageStatProps> = ({ selected_component_id, set_selected
   const table_element = (
     <>
       <Table columns={columns} dataSource={data_source} pagination={false} />
-      <div text-align="center" mt="18">
+      <div flex="~" justify="center" mt="18">
         <Pagination
           onShowSizeChange={(page, size) => {
             set_page(page)

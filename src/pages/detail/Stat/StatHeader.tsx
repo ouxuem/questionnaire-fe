@@ -4,6 +4,9 @@ import React, { useMemo, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { usePageInfoStore } from '../../../store/pageInfo'
 import QRCode from 'qrcode.react'
+import { MANAGE_LIST_URL } from '../../../router'
+import { useRequest } from 'ahooks'
+import { api_q_updateQuestion } from '../../../api/question'
 const StatHeader: React.FC = () => {
   const navigate = useNavigate()
   const { title, isPublished } = usePageInfoStore()
@@ -41,13 +44,24 @@ const StatHeader: React.FC = () => {
       </Space>
     )
   }, [id, isPublished])
-
+  const { run, loading } = useRequest(
+    async () => {
+      await api_q_updateQuestion(id, { isPublished: !isPublished })
+    },
+    {
+      manual: true,
+      onSuccess: () => {
+        message.success(`${isPublished ? '取消发布' : '发布'}成功`)
+        navigate('/manage/list')
+      },
+    }
+  )
   return (
     <div bg="#fff" border="b-solid 1 b-[#e8e8e8]" py="12">
       <div flex="~" mx="24">
         <div flex="1">
           <Space>
-            <Button onClick={() => navigate(-1)} type="link" icon={<LeftOutlined />}>
+            <Button onClick={() => navigate(MANAGE_LIST_URL)} type="link" icon={<LeftOutlined />}>
               返回
             </Button>
             <Typography.Title text="!18" mb="!0" line-height="!1">
@@ -59,8 +73,8 @@ const StatHeader: React.FC = () => {
           {link_and_QRcode_element}
         </div>
         <div flex="1" text-align="right">
-          <Button onClick={() => navigate(`/detail/edit/${id}`)} type="primary">
-            编辑问卷
+          <Button type={isPublished ? 'default' : 'primary'} loading={loading} danger={isPublished} onClick={run}>
+            {isPublished ? '取消发布' : '发布'}
           </Button>
         </div>
       </div>

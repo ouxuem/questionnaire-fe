@@ -1,15 +1,11 @@
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { api_q_getQuestion } from '../api/question'
 import { useRequest } from 'ahooks'
 import { useEffect } from 'react'
 import { useComponentListStore } from '../store/componentList'
 import { usePageInfoStore } from '../store/pageInfo'
-import { message } from 'antd'
 /** 获取编辑页面数据 */
 const useLoadQuestionData = () => {
-  const navigate = useNavigate()
-  const { pathname } = useLocation()
-
   const resetComponents = useComponentListStore((state) => state.resetComponents)
   const { resetPageInfo } = usePageInfoStore()
   const { id = '' } = useParams()
@@ -22,14 +18,6 @@ const useLoadQuestionData = () => {
     },
     {
       manual: true,
-      onSuccess: (res) => {
-        if (res.isPublished && !pathname.startsWith('/detail/stat/')) {
-          console.log(pathname);
-          
-          message.error('该问卷已发布，无法编辑')
-          navigate('/manage/list')
-        }
-      },
     }
   )
 
@@ -39,12 +27,12 @@ const useLoadQuestionData = () => {
 
   useEffect(() => {
     if (!data) return
-    const { title = '', componentList = [], desc = '', js = '', css = '', isPublished = false } = data
+    const { answerCount = 0, title = '', componentList = [], desc = '', js = '', css = '', isPublished = false } = data
     let selectedId = ''
     if (componentList.length > 0) {
       selectedId = componentList[0].fe_id
     }
-    resetComponents({ componentList, selectedId, copiedComponent: null })
+    resetComponents({ componentList, selectedId, copiedComponent: null, answerCount })
     resetPageInfo({ title, desc, js, css, isPublished })
   }, [data])
 

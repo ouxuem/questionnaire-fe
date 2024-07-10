@@ -12,6 +12,7 @@ export type ComponentInfoType = {
   props: ComponentPropsType
   isHidden?: boolean
   isLocked?: boolean
+  order?:number
 }
 
 export type ComponentListState = {
@@ -21,6 +22,8 @@ export type ComponentListState = {
   selectedId: string
   /** 复制的组件 */
   copiedComponent: ComponentInfoType | null
+  /** 答卷数量 */
+  answerCount: number | undefined
 }
 
 type Action = {
@@ -97,6 +100,7 @@ export const useComponentListStore = create<ComponentListState & Action>()(
       componentList: [],
       selectedId: '',
       copiedComponent: null,
+      answerCount: undefined,
       resetComponents: (componentList) => {
         set((state) => {
           state.componentList = componentList.componentList
@@ -117,8 +121,8 @@ export const useComponentListStore = create<ComponentListState & Action>()(
               if (Array.isArray(props.list)) {
                 props.list = props.list.filter((item) => item.text.trim() !== '' || item.value.trim() !== '')
               }
-              if(props.title === ""){
-                props.title = "未命名问题"
+              if (props.title === '') {
+                props.title = '未命名问题'
               }
             }
           }
@@ -288,4 +292,3 @@ export const useComponentListStore = create<ComponentListState & Action>()(
     }
   )
 )
-

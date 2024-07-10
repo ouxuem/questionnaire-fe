@@ -31,13 +31,14 @@ const TitleEdit: React.FC = () => {
 
 const SaveButton: React.FC<{ initialize_loading: boolean }> = ({ initialize_loading }) => {
   const { title, css, js, desc } = usePageInfoStore()
-  const { componentList = [] } = useComponentListStore()
+  const { componentList: rawComponentList = [] } = useComponentListStore()
   const { id } = useParams()
 
   // 手动保存
   const { run: manualSave, loading: manualLoading } = useRequest(
     async () => {
       if (!id) return
+      const componentList = rawComponentList.map((item, index) => ({ ...item, order: index }))
       await api_q_updateQuestion(id, { title, css, js, desc, componentList })
     },
     {
@@ -51,6 +52,7 @@ const SaveButton: React.FC<{ initialize_loading: boolean }> = ({ initialize_load
   const { loading, run: save } = useRequest(
     async () => {
       if (!id) return
+      const componentList = rawComponentList.map((item, index) => ({ ...item, order: index }))
       await api_q_autoSaveQuestion(id, { title, css, js, desc, componentList })
     },
     { manual: true }
@@ -67,7 +69,7 @@ const SaveButton: React.FC<{ initialize_loading: boolean }> = ({ initialize_load
         save()
       }
     },
-    [title, css, js, desc, componentList],
+    [title, css, js, desc, rawComponentList],
     { wait: 1000 }
   )
   return (
@@ -81,11 +83,12 @@ const SaveButton: React.FC<{ initialize_loading: boolean }> = ({ initialize_load
 const PublishButton: React.FC = () => {
   const navigate = useNavigate()
   const { title, css, js, desc } = usePageInfoStore()
-  const { componentList = [] } = useComponentListStore()
+  const { componentList: rawComponentList = [] } = useComponentListStore()
   const { id } = useParams()
   const { loading, run: publish } = useRequest(
     async () => {
       if (!id) return
+      const componentList = rawComponentList.map((item, index) => ({ ...item, order: index }))
       await api_q_updateQuestion(id, { title, css, js, desc, componentList, isPublished: true })
     },
     {
