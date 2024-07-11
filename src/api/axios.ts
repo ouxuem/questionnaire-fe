@@ -27,7 +27,7 @@ const axiosInstance = axios.create({
   // hq
   // baseURL: 'http://192.168.31.219:5001/api',
   // nest
-  baseURL: 'http://localhost/api',
+  baseURL: 'http://116.198.237.82/api',
   timeout: 10 * 1000,
 })
 
