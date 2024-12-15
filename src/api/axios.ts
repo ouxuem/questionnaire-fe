@@ -25,11 +25,10 @@ const queue: PendingTask[] = []
 const axiosInstance = axios.create({
   // baseURL: 'http://127.0.0.1:3005/api',
   // hq
-  baseURL: 'http://192.168.31.219:5001/api',
+  // baseURL: 'http://192.168.31.219:5001/api',
   // nest
-  // baseURL: 'http://localhost/api',
+  baseURL: 'http://116.198.237.82/api',
   timeout: 10 * 1000,
-  //test123
 })
 
 const refreshToken = async () => {
