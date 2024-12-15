@@ -1,6 +1,7 @@
-import { RouterProvider,  } from 'react-router-dom'
+import { RouterProvider, useRoutes } from 'react-router-dom'
 import routerConfig from './router'
 
+useRoutes
 function App() {
   return (
    
