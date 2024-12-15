@@ -31,7 +31,6 @@ const axiosInstance = axios.create({
   timeout: 10 * 1000,
   //test123
   //test444
-  //test445
 })
 
 const refreshToken = async () => {
